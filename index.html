@@ -1,0 +1,49 @@
+index.html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZARR Camera Test</title>
+</head>
+<body style="background:#09090d;color:white;text-align:center;font-family:Arial;padding:25px">
+<h2>ZARR — Camera Test</h2>
+<p>Разреши Safari доступ к передней камере.</p>
+
+<button id="start">Включить камеру</button>
+<br><br>
+
+<video id="video" autoplay playsinline style="width:100%;max-width:400px"></video>
+<br><br>
+
+<button id="capture" disabled>Сделать фото</button>
+<br><br>
+
+<canvas id="canvas" style="width:100%;max-width:400px"></canvas>
+
+<script>
+const video = document.getElementById("video");
+const capture = document.getElementById("capture");
+const canvas = document.getElementById("canvas");
+
+document.getElementById("start").onclick = async () => {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "user" },
+      audio: false
+    });
+    video.srcObject = stream;
+    capture.disabled = false;
+  } catch (error) {
+    alert("Камера недоступна: " + error.message);
+  }
+};
+
+capture.onclick = () => {
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext("2d").drawImage(video, 0, 0);
+};
+</script>
+</body>
+</html>
